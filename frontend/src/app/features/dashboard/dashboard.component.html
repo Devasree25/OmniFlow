@@ -1,0 +1,93 @@
+<div class="dashboard-container">
+  <header class="dashboard-header">
+    <div class="container">
+      <div class="header-content">
+        <div class="logo">
+          <h1>OmniFlow</h1>
+        </div>
+        <nav class="main-nav">
+          <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
+          <a routerLink="/workflows" routerLinkActive="active">Workflows</a>
+          <a routerLink="/admin" routerLinkActive="active" *ngIf="currentUser?.role === 'ADMIN' || currentUser?.role === 'SUPER_ADMIN'">Admin</a>
+        </nav>
+        <div class="user-menu">
+          <span class="user-name">{{ currentUser?.first_name }} {{ currentUser?.last_name }}</span>
+          <span class="badge badge-in-review">{{ currentUser?.role }}</span>
+          <button class="btn btn-secondary" (click)="logout()">Logout</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="dashboard-main">
+    <div class="container">
+      <div class="welcome-section">
+        <h2>Welcome back, {{ currentUser?.first_name }}!</h2>
+        <p class="text-secondary">{{ currentUser?.department }} Department</p>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <h3>Total Workflows</h3>
+          <div class="stat-value">{{ workflows.length }}</div>
+        </div>
+        <div class="stat-card">
+          <h3>Pending</h3>
+          <div class="stat-value">{{ (workflows | json).split('"PENDING"').length - 1 }}</div>
+        </div>
+        <div class="stat-card">
+          <h3>Approved</h3>
+          <div class="stat-value">{{ (workflows | json).split('"APPROVED"').length - 1 }}</div>
+        </div>
+        <div class="stat-card">
+          <h3>Rejected</h3>
+          <div class="stat-value">{{ (workflows | json).split('"REJECTED"').length - 1 }}</div>
+        </div>
+      </div>
+
+      <div class="workflows-section">
+        <h3>Recent Workflows</h3>
+        
+        <div class="loading" *ngIf="loading">
+          <div class="spinner"></div>
+        </div>
+
+        <div class="table-container" *ngIf="!loading">
+          <table class="table" *ngIf="workflows.length > 0">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Status</th>
+                <th>Department</th>
+                <th>Created</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let workflow of workflows.slice(0, 10)">
+                <td>{{ workflow.title }}</td>
+                <td>
+                  <span class="badge" [ngClass]="getStatusBadgeClass(workflow.status)">
+                    {{ workflow.status }}
+                  </span>
+                </td>
+                <td>{{ currentUser?.department }}</td>
+                <td>{{ workflow.created_at | date: 'short' }}</td>
+                <td>
+                  <button class="btn btn-sm btn-primary" [routerLink]="['/workflows', workflow.id]">
+                    View
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="empty-state" *ngIf="workflows.length === 0">
+            <p>No workflows found.</p>
+            <button class="btn btn-primary" routerLink="/workflows">Create Workflow</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>

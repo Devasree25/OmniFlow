@@ -1,0 +1,29 @@
+# ======================
+# Angular / Node
+# ======================
+node_modules/
+frontend/node_modules/
+frontend/.angular/
+frontend/dist/
+dist/
+coverage/
+*.log
+
+# ======================
+# Rust
+# ======================
+backend/target/
+target/
+
+# ======================
+# Environment Files
+# ======================
+.env
+.env.local
+
+# ======================
+# OS / Editor
+# ======================
+.DS_Store
+Thumbs.db
+.vscode/
