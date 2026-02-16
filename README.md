@@ -141,4 +141,7 @@ npm run e2e
 Docker Deployment
 docker-compose up --build
 
-Last updated: 2026-02-13
+Contributing
+Open a pull request from a feature branch (e.g. feature/updates) into main.
+
+Last updated: 2026-02-16
